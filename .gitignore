@@ -34,3 +34,9 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+
+# don't commit RStudio Project Files
+*.Rproj
+
+# don't commit Macintosh files
+*.DS_Store/
