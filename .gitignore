@@ -40,3 +40,4 @@ rsconnect/
 
 # don't commit Macintosh files
 *.DS_Store/
+.Rproj.user
