@@ -1,0 +1,144 @@
+---
+title: 'Chapter 1:  Visualization with ggplot'
+author: "Augustina Ragwitz"
+date: "June 3, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r imports}
+library(tidyverse)
+```
+
+# First Steps
+
+## Do cars with big engines use more fuel than cars with small engines?
+
+### What is the relationship between engine-size and fuel efficiency?
+
+This analysis uses the mpg dataset [^mpg].
+
+```{r mpg}
+summary(mpg)
+
+paste("displ - the car's engine size, in liters:", paste(mpg$displ, collapse=","))
+
+paste("hwy - the car's fuel efficiency on the highway, in mpg. Low fuel efficiency == more fuel consumed: ", 
+      paste(mpg$hwy, collapse=","))
+```
+
+
+```{r fig-engine-size-vs-fuel-efficiency}
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+```
+
+The plot shows a negative relationship between engine size and fuel efficiency. A larger engine uses more fuel than a smaller engine.
+
+## Exercises
+
+### 1. Run `ggplot(data = mpg)`.
+
+```{r exercise-1.1}
+ggplot(data = mpg)
+```
+
+### 2. How many rows are in `mtcars`? How many columns?
+
+```{r exercise-1.2}
+paste("There are", nrow(mtcars), " rows in mtcars.")
+paste("There are", ncol(mtcars), "columns in mtcars.")
+```
+
+### 3. What does the `drv` variable describe? Read `?mpg` to find out.
+
+`drv` describes the "drive" or how many wheels on a car are engaged.
+
+```{r exercise-1.3}
+paste("drv: f = front-wheel drive, r = rear wheel drive, 4 = 4wd")
+```
+
+
+### 4. Make a scatterplot of `hwy` vs `cyl`.
+
+```{r exercise-1.4}
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = hwy, y = cyl))
+
+```
+
+The number of cylinders also appears to be related to the overall fuel-efficiency in some cases.
+
+### 5. Make a scatterplot of `class` vs `drv`. Why isn't it useful?
+
+There isn't anyway to see the frequency!
+
+```{r exercise-1.5}
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = class, y = drv))
+
+ggplot(data = mpg) +
+  geom_bar(aes(x = class, fill = drv))
+
+```
+
+```{r exercise-1.5-better}
+
+ggplot(data = mpg) +
+  geom_jitter(mapping = aes(x = class, y = drv, color = class, shape = drv))
+
+```
+
+
+# Facets
+
+```{r exercises}
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y= hwy)) +
+  facet_grid(drv ~ cyl)
+
+# facet into rows only
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y= hwy)) +
+  facet_grid(drv ~ .)
+
+# facet into columns only
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+
+# the varialbe with more unique levels should go into the columns
+
+```
+
+# Statistical Transformations
+
+```{r}
+
+# summarize y values for each unique x value
+
+ggplot(data = diamonds) +
+  stat_summary(mapping = aes(x = cut, y = depth),
+               fun.ymin = min,
+               fun.ymax = max,
+               fun.y = median)
+```
+
+
+
+
+
+
+
+
+---
+
+[mpg]: "This dataset contains a subset of the fuel economy data that the EPA makes available on http://fueleconomy.gov. It contains only models which had a new release every year between 1999 and 2008 - this was used as a proxy for the popularity of the car." From H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
