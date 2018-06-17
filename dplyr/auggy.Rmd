@@ -1,0 +1,42 @@
+---
+title: "R4DS: dplyr"
+author: "Augustina Ragwitz"
+date: "June 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Select
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+```{r}
+flights
+```
+
+
+
+```{r select-1}
+select(flights, year, month, day)
+```
+
+```{r select-everything}
+
+select(flights, time_hour, air_time, everything())
+
+```
+
+```{r select-match}
+
+select(flights, ends_with("time"))
+
+```
+
+
+
