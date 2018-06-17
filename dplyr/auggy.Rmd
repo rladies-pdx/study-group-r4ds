@@ -1,0 +1,95 @@
+---
+title: "R4DS: dplyr"
+author: "Augustina Ragwitz"
+date: "June 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Select
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+```{r}
+flights
+```
+
+
+
+```{r select-1}
+select(flights, year, month, day)
+```
+
+```{r select-everything}
+
+select(flights, time_hour, air_time, everything())
+
+```
+
+```{r select-match}
+
+select(flights, ends_with("time"))
+
+```
+
+# Mutate
+
+```{r mutate-1}
+
+# log -> log2() difference of 1 on the log scale corresponds to doubling, -1 corresponds to half
+
+# use lead() + lag() for running totals
+
+# cumulative + rolling aggregates
+# RcppRoll -> sum computed over rolling window
+
+x <- 1:10
+cumsum(x)
+cummin(x)
+
+# ranking - min_rank, row_number, dense_rank, percent_rank, cume_dist, ntile
+```
+
+# Summarise
+
+```{r summarize-1}
+
+not_cancelled <- flights %>%
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+
+
+# measures of spread
+
+not_cancelled %>%
+  group_by(dest) %>%
+  summarize(
+    distance_sd = sd(distance),
+    distance_iqr = IQR(distance),
+    distance_mad = mad(distance)
+    ) %>%
+  arrange(desc(distance_sd))
+
+# measures of rank
+
+# min(), quantile(), max()
+
+not_cancelled %>%
+  group_by(year, month, day) %>%
+  summarize(
+    first = min(dep_time),
+    last = max(dep_time),
+    top_25 = quantile(dep_time, .75)
+  )
+  
+```
+
+
+
+
+
